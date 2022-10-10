@@ -6,9 +6,7 @@ which are not present in color_list_2."""
 input_ = input('Enter your colors: ')
 colors1, colors2 = map(str, input_.split(','))
 
-color_list_1 = colors1.split()
-color_list_2 = colors2.split()
+color_list_1 = set(colors1.split())
+color_list_2 = set(colors2.split())
 
-my_set = {color for color in color_list_1 if color not in color_list_2}
-
-print(my_set)
+print(color_list_1.difference(color_list_2))
