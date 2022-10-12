@@ -8,5 +8,5 @@ my_list = [(), ('hey'), ('',), ('ma', 'ke', 'my'), [''], {}, ['d', 'a', 'y'], ''
 # print(len(my_list))
 
 my_list = [value for value in my_list if value]
-# print(my_list)
+print(my_list)
 # print(len(my_list))
