@@ -16,7 +16,7 @@ for element in values:
         count_dict[element] = 1
 
 for k, v in count_dict:
-	if v > 1
-https://uakino.club/filmy/10838-bankr.html
+	if v > 1:
+
 print(duplicates)
 print(my_dict)

@@ -9,7 +9,8 @@ dict_1 = {'foo': 'bar', 'bar': 'buz'}
 dict_2 = {'dou': 'jones', 'USD': 36}
 dict_3 = {'AUD': 19.2, 'name': 'Tom'}
 
-new_dict = dict_1.copy()
-new_dict.update(dict_2)
-new_dict.update(dict_3)
+new_dict = {}
+for d in (dict_1, dict_2, dict_3):
+    new_dict.update(d)
+
 print(new_dict)

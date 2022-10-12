@@ -4,12 +4,12 @@ dictionary in range <number> where key is <number> and value is
     e.g. 3 --> {0: 0, 1: 1, 2: 4, 3: 9}"""
 
 
-# user_imput = int(input('Enter dictionary range (only int): '))
-user_imput = 3
+# user_input = int(input('Enter dictionary range (only int): '))
+user_input = 3
 
 my_dict = {}
-for n in range(user_imput + 1):
+for n in range(user_input + 1):
     v = n ** 2
-    my_dict.fromkeys(n, v)
+    my_dict.fromkeys(str(n), v)
 
 print(my_dict)
