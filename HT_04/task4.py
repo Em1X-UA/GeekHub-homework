@@ -23,15 +23,13 @@ def check_string(string):
         print(f'String length is: {len_str}. '
               f'String has: {len(alpha_list())} letters, '
               f'and {len(digit_list())} digits')
-        return
     elif len_str < 30:
         print(f'String contains numbers whose sum is: {sum(digit_list())} '
               f'and "{"".join(alpha_list())}" letters')
-        return
     else:
         print(f'String has {len_str - len(alpha_list()) - len(digit_list())} '
               f'symbols that do not belong to letters or digits.')
-        return
+    return
 
 
 my_str = 'f98neroi4nr0c3n30irn03ien3c0rfe kdno400we(nw,kowe%00koi!jn35pijnp4 ' \
