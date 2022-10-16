@@ -19,7 +19,7 @@ def check_string(string):
     def digit_list():
         return [int(i) for i in string if i.isdigit()]
 
-    if len_str in range(30, 50):
+    if len_str in range(30, 50 + 1):
         print(f'String length is: {len_str}. '
               f'String has: {len(alpha_list())} letters, '
               f'and {len(digit_list())} digits')
