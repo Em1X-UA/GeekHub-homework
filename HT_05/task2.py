@@ -11,8 +11,8 @@ def bank(deposit, years, percents=10):
     for _ in range(1, years + 1):
         deposit *= 1 + percents / 100
     print(f'There is {round(deposit, 2)} "USD" on your account.')
-    return
+    return round(deposit, 2)
 
 
-bank(1000, 5, 15)
-bank(1000, 3)
+print(bank(1000, 5, 15))
+print(bank(1000, 3))
