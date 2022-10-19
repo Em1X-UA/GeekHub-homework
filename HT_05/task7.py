@@ -10,13 +10,12 @@ def count_same(*args):
     count_dict = {}
     for el in args:
         if str(el) not in count_dict.keys():
-            count = 1
-            count_dict.update({str(el): count})
+            count_dict.update({str(el): 1})
         else:
-            count = count_dict.get(str(el)) + 1
-            count_dict.update({str(el): count})
+            count_dict.update({str(el): count_dict.get(str(el)) + 1})
     for k, v in count_dict.items():
         print(f'Value "{k}" passed in function {v} times.')
+    return
 
 
 count_same(1, 1, 'foo', [1, 2], True, 'foo', 1, [1, 2])
