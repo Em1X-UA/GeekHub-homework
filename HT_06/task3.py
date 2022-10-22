@@ -27,41 +27,31 @@ def check_name_password(name, password):
     class PasswordStrongSecurityException(Exception):
         pass
 
-    def name_check():
+    check_status = 'Password status: '
+    try:
         if len(name) not in range(3, 50 + 1):
             raise NameLenException('Name length must be >= 3 and <= 50')
-        return
-
-    def password_check():
         if len(password) < 8:
             raise PasswordLenException('Password should be >= 8 symbols')
         if not [x for x in password if x.isdigit()]:
             raise PasswordSecurityException('Password must have at list one digit')
         if ('.' not in password) and ('_' not in password):
             raise PasswordStrongSecurityException('Password must have "_" or "." symbol')
-        return
-
-    try:
-        name_check()
     except NameLenException as err:
-        print(err)
-
-    password_status = 'Password status: '
-    try:
-        password_check()
+        check_status = f'Name error: {err}'
     except PasswordLenException as err:
-        password_status += str(err)
+        check_status += str(err)
     except PasswordSecurityException as err:
-        password_status += str(err)
+        check_status += str(err)
     except PasswordStrongSecurityException as err:
-        password_status += str(err)
+        check_status += str(err)
     else:
-        password_status += 'OK'
+        check_status += 'OK'
 
-    return password_status
+    return check_status
 
 
-users = [('MobyDick', 'Melville_18190801'), ('Zidane', 'Ballon'),
+users = [('MD', 'Melville_18190801'), ('Zidane', 'Ballon'),
          ('Ronaldinho10', 'JogaBonita.1980'), ('Barry.Allen', 'F4stest.man_alive'),
          ('Elon_Mask', 'Glory_to_Ukraine'), ('Anonimous', 'fsdfds1f')]
 

@@ -23,16 +23,13 @@ def morse_code(entered_string, default='decode'):
                     "U": "..-", "V": "...-", "W": ".--", "X": "-..-", "Y": "-.--",
                     "Z": "--..", " ": "space", "SOS": "...---..."}
 
-    def decoder():
+    if decode:
         decode_table = {v: k for k, v in encode_table.items()}
         symbols = entered_string.replace("   ", " space ").split(" ")
         return "".join(decode_table[x] for x in symbols)
-
-    def encoder():
+    else:
         symbols = " ".join(encode_table[x] for x in entered_string.upper())
         return symbols.replace(" space ", "   ")
-
-    return decoder() if decode else encoder()
 
 
 print(morse_code('--. . . -.- .... ..- -...   .. ...   .... . .-. .'))
