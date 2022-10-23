@@ -10,10 +10,11 @@
                                 (його також треба створити =))"""
 
 
-def user_check(name, password, silent=False):
-    class LoginException(Exception):
-        pass
+class LoginException(Exception):
+    pass
 
+
+def user_check(name, password, silent=False):
     users = [('MobyDick', 'Melville_18190801'), ('Zidane', 'Ballon_dor_1998'),
              ('Ronaldinho10', 'JogaBonita.1980'), ('Barry.Allen', 'F4stest.man_alive'),
              ('Elon_Mask', 'Gl0ry_to_Ukraine')]
