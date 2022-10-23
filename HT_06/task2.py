@@ -7,24 +7,28 @@
    відповідним текстом."""
 
 
+class NameLenException(Exception):
+    pass
+
+
+class PasswordLenException(Exception):
+    pass
+
+
+class PasswordSecurityException(Exception):
+    pass
+
+
+class PasswordStrongSecurityException(Exception):
+    pass
+
+
 def check_name_password(name, password):
-    class NameLenException(Exception):
-        pass
-
-    class PasswordLenException(Exception):
-        pass
-
-    class PasswordSecurityException(Exception):
-        pass
-
-    class PasswordStrongSecurityException(Exception):
-        pass
-
     name_status = f'Name "{name}" status is: '
     password_status = 'Password status: '
 
     try:
-        if len(name) not in range(3, 50 + 1):
+        if not 3 <= len(name) <= 50:
             raise NameLenException('Name length must be >= 3 and <= 50')
         if len(password) < 8:
             raise PasswordLenException('Password should be >= 8 symbols')

@@ -19,10 +19,10 @@ def user_check(name, password, silent=False):
              ('Elon_Mask', 'Gl0ry_to_Ukraine')]
 
     try:
-        for user in users:
-            if name == user[0] and password == user[1]:
-                return True
-        raise LoginException('Incorrectly entered login or password')
+        if (name, password) in users:
+            return True
+        else:
+            raise LoginException('Incorrectly entered login or password')
     except LoginException as err:
         if silent:
             return False
