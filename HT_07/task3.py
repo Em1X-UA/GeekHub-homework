@@ -10,3 +10,52 @@
    Подивіться як веде себе стандартний range в таких випадках."""
 
 
+def hand_made_range(start, stop, step=1):
+    """This is hand made range function.
+    Start and Stop arguments are required, Step - optional
+    Also you can use float values and values in string (in q-ty of args)
+    (like input() func without handle conversion) as arguments"""
+
+    def determine_value(num):
+        try:
+            num = float(num)
+            return num if num % 1 != 0 else int(num)
+        except ValueError:
+            print(f'Argument "{num}" is not a number')
+            raise ValueError
+
+    start = determine_value(start)
+    stop = determine_value(stop)
+    step = determine_value(step)
+
+    try:
+        if step == 0:
+            raise ValueError('Step argument can\'t be 0!')
+        elif start == stop:
+            raise ValueError('Start and Stop arguments can\'t be equal')
+        elif start > stop and step > 0:
+            raise ValueError('If Start value bigger than Stop, Step should be negative')
+        elif start < stop and step < 0:
+            raise ValueError('You can\'t move from less value to bigger by subtracting')
+    except ValueError as err:
+        print(f'Error!!! {err}')
+    else:
+        end_val = stop
+        value = start
+
+        if start < stop:
+            while value < end_val:
+                yield round(determine_value(value), 2)
+                value += step
+        else:
+            while value > end_val:
+                yield round(determine_value(value), 2)
+                value += step
+
+
+my_gen_func = hand_made_range(2, '180.2', 20.5)
+result_list = list(my_gen_func)
+print(result_list)
+
+type_list = [type(elem) for elem in result_list]
+print(type_list)

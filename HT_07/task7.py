@@ -7,3 +7,12 @@
     array_diff([1, 2, 2, 2, 3, 4], [2]) --> [1, 3, 4]"""
 
 
+def lists_difference(list1: list, list2: list):
+    # return list(set(list1).difference(set(list2)))  # набагато швидше
+    return [x for x in list1 if x not in list2]
+
+
+my_list1 = [1, 2, 2, 2, 3, 4]
+my_list2 = [2]
+result = lists_difference(my_list1, my_list2)
+print(result, type(result))
