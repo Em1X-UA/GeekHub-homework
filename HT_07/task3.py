@@ -25,11 +25,11 @@ def hand_made_range(*args):
 
     args_list = [determine_value(item) for item in args]
     if len(args_list) == 1:
-        stop = args_list[0]
         start = 0
+        stop = args_list[0]
         step = 1 if stop > start else -1
     elif len(args_list) == 2:
-        start, stop = args_list[0], args_list[1]
+        start, stop = args_list
         step = 1 if stop > start else -1
     elif len(args_list) == 3:
         start, stop, step = args_list
@@ -48,15 +48,13 @@ def hand_made_range(*args):
     except ValueError as err:
         print(f'Error!!! {err}')
     else:
-        end_val = stop
         value = start
-
         if start < stop:
-            while value < end_val:
+            while value < stop:
                 yield round(determine_value(value), 2)
                 value += step
         else:
-            while value > end_val:
+            while value > stop:
                 yield round(determine_value(value), 2)
                 value += step
 
