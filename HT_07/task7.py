@@ -8,7 +8,6 @@
 
 
 def lists_difference(list1: list, list2: list):
-    # return list(set(list1).difference(set(list2)))  # набагато швидше
     return [x for x in list1 if x not in list2]
 
 
