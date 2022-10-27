@@ -10,9 +10,10 @@
    Подивіться як веде себе стандартний range в таких випадках."""
 
 
-def hand_made_range(*args):
+def hand_made_range(start, stop=None, step=None):
     """This is hand made range function.
-    You can use float values and values in string (in q-ty of args)
+    Start and Stop arguments are required, Step - optional
+    Also you can use float values and values in string (in q-ty of args)
     (like input() func without handle conversion) as arguments"""
 
     def determine_value(num):
@@ -23,18 +24,13 @@ def hand_made_range(*args):
             print(f'Argument "{num}" is not a number')
             raise ValueError
 
-    args_list = [determine_value(item) for item in args]
-    if len(args_list) == 1:
-        start = 0
-        stop = args_list[0]
+    start = determine_value(start)
+    if stop is None:
+        stop, start = start, 0
+    stop = determine_value(stop)
+    if step is None:
         step = 1 if stop > start else -1
-    elif len(args_list) == 2:
-        start, stop = args_list
-        step = 1 if stop > start else -1
-    elif len(args_list) == 3:
-        start, stop, step = args_list
-    else:
-        raise TypeError(f'Expected 1-3 arguments, got {len(args_list)}')
+    step = determine_value(step)
 
     try:
         if step == 0:
