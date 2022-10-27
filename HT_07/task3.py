@@ -12,8 +12,7 @@
 
 def hand_made_range(start, stop=None, step=None):
     """This is hand made range function.
-    Start and Stop arguments are required, Step - optional
-    Also you can use float values and values in string (in q-ty of args)
+    You can use float values and values in string (in q-ty of args)
     (like input() func without handle conversion) as arguments"""
 
     def determine_value(num):
@@ -27,10 +26,12 @@ def hand_made_range(start, stop=None, step=None):
     start = determine_value(start)
     if stop is None:
         stop, start = start, 0
-    stop = determine_value(stop)
+    else:
+        stop = determine_value(stop)
     if step is None:
         step = 1 if stop > start else -1
-    step = determine_value(step)
+    else:
+        step = determine_value(step)
 
     try:
         if step == 0:
