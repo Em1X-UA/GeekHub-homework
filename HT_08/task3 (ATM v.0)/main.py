@@ -235,8 +235,8 @@ def greetings():
     print('Hello! I\'m console ATM program')
     print('Please use only digits for navigation in menu\n')
 
-    first_input = input('Press ENTER to proceed, or type '
-                        '"register" if you\'re new user: ')
+    first_input = input('Press any key and (or just) ENTER to proceed, or type'
+                        ' "register" (and press ENTER) if you\'re new user: ')
     if first_input.lower() == 'register':
         register()
 
@@ -273,7 +273,7 @@ def check_balance(user):
         balance = bal_file.read()
     balance = round(determine_value(balance), 2)
     print(f'You have {balance} UAH')
-    input('Press ENTER to back main menu')
+    input('Press any key and (or just) ENTER to back main menu')
     return user_menu(user)
 
 
@@ -297,7 +297,7 @@ def check_logs(user):
                 for key, value in el.items():
                     print(f'{key}: {value}')
             print('=======================')
-    input('Press ENTER to back main menu')
+    input('Press any key and (or just) ENTER to back main menu')
     clear()
     user_menu(user)
 
@@ -333,7 +333,7 @@ def withdraw_money(user):
                 logger(user, 'withdraw', f'-{user_input}')
 
                 print(f'{user_input} UAH successfully withdrawn')
-                input('Press ENTER to back main menu')
+                input('Press any key and (or just) ENTER to back main menu')
                 clear()
                 user_menu(user)
         except ValueError:
@@ -359,6 +359,10 @@ def top_up_balance(user):
             user_input = int(user_input)
             balance = determine_value(balance)
             if user_input % min_banknote != 0:
+                print(f'ATM accepts banknotes with a minimum denomination of {min_banknote}')
+                raise ValueError
+            elif user_input <= 0:
+                print('You can\'t add negative (or zero) amount to your balance!')
                 raise ValueError
             else:
                 balance += user_input
@@ -368,7 +372,7 @@ def top_up_balance(user):
                 logger(user, 'Top up', f'+{user_input}')
 
                 print(f'Your account has been topped up by {user_input} UAH.')
-                input('Press ENTER to back main menu')
+                input('Press any key and (or just) ENTER to back main menu')
                 clear()
                 user_menu(user)
         except ValueError:
