@@ -325,6 +325,9 @@ def withdraw_money(user):
             balance = determine_value(balance)
             if user_input > balance or user_input % min_banknote != 0:
                 raise ValueError
+            elif user_input <= 0:
+                print('You can\'t withdraw negative (or zero) amount!')
+                raise ValueError
             else:
                 balance -= user_input
 
