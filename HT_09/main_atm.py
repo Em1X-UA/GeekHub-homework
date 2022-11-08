@@ -25,18 +25,10 @@
     що б ми могли його використати """
 
 
-
-""""ЯКЩО ВИ ЦЕ БАЧИТЕ, ТО ЦЕ ЩЕ НЕ ПРАЦЮЄ ПОВНІСТЮ ЯК ТРЕБА. ЗАЙМАЮСЬ ВИПРАВЛЕННЯМ
-ПРОХАННЯ ПЕРЕВІРИТИ ПІЗНІШЕ. НАДІСЛАВ ТАК ПОКИ НЕ ЗАКРИЛОСЬ, ЩОБ НЕ ЗАРАХУВАЛИ ЯК ПРОВТИК
-ПРОШУ ВИБАЧЕННЯ ЗА ЗАТРИМКУ"""
-
-
-
 import os
 import sqlite3
 from datetime import datetime
 from time import sleep
-from random import choice
 
 
 atm_data = 'atm_database.db'
@@ -103,11 +95,14 @@ def register():
             if not 4 <= len(name) <= 50:
                 raise NameLenException('Name length must be >= 4 and <= 50')
             if not 8 <= len(password) <= 50:
-                raise PasswordLenException('Password should be >= 8 and <= 50 symbols')
+                raise PasswordLenException('Password should be '
+                                           '>= 8 and <= 50 symbols')
             if not [x for x in password if x.isdigit()]:
-                raise PasswordSecurityException('Password must have at list one digit')
+                raise PasswordSecurityException('Password must have '
+                                                'at list one digit')
             if ('.' not in password) and ('_' not in password):
-                raise PasswordStrongSecurityException('Password must have "_" or "." symbol')
+                raise PasswordStrongSecurityException('Password must have '
+                                                      '"_" or "." symbol')
         except NameLenException as err:
             name_status += str(err)
             password_status += 'Please fix NAME first!'
@@ -152,8 +147,8 @@ def register():
             print('Try to register again?')
             try_again_or_start(register)
 
-    user_password = input('Enter your password (password must have >= 8 and <= 50 symbols, '
-                          'at least 1 digit, and "_" or "." symbol): ')
+    user_password = input('Enter your password (must have >= 8 and <= 50 '
+                          'symbols, at least 1 digit, and "_" or "." symbol): ')
     check_name_password(user_login, user_password)
     confirm_password(user_password)
 
@@ -198,9 +193,9 @@ def login_user():
                     clear()
 
                     collector_status = cursor.execute("SELECT is_collector "
-                                                      "FROM main.users_data "
+                                                      "FROM users_data "
                                                       "WHERE user = ?", [input_login])
-                    if collector_status:
+                    if collector_status.__next__()[0] == '1':
                         return admin_menu(input_login)
                     else:
                         return input_login
@@ -263,6 +258,7 @@ def greetings():
 
 def try_again_user(func, user):
     """Function mostly for input error cases after login"""
+
     print('1. Try again')
     print('2. Back to main menu')
     print('0. Exit')
@@ -325,7 +321,7 @@ def check_logs(user):
     input('Press any key and (or just) ENTER to back main menu')
     clear()
 
-    if collector_status:
+    if collector_status.__next__()[0] == '1':
         return admin_menu(user)
     else:
         user_menu(user)
@@ -351,7 +347,7 @@ def withdraw_money(user):
         balance = cursor.execute("SELECT balance FROM users_data "
                                  "WHERE user = ?", [user]).fetchone()[0]
 
-    min_banknote = choice([50, 100, 200])
+    min_banknote = min(banknotes_list)
     clear()
 
     attempts = input_attempts
@@ -397,7 +393,7 @@ def withdraw_money(user):
 
 
 def top_up_balance(user):
-    min_banknote = choice([5, 10, 20])
+    min_banknote = min(banknotes_list)
     clear()
     attempts = input_attempts
     for _ in range(input_attempts):
@@ -411,7 +407,8 @@ def top_up_balance(user):
                 raise ValueError
             else:
                 if user_input % min_banknote != 0:
-                    print(f'ATM accepts banknotes with a minimum denomination of {min_banknote}')
+                    print(f'ATM accepts banknotes with a minimum denomination '
+                          f'of {min_banknote}')
                     print(f'Take your {user_input % min_banknote} UAH back!')
                     user_input -= user_input % min_banknote
                 with sqlite3.connect(atm_data) as db:
@@ -492,6 +489,7 @@ def change_banknotes_balance_menu(user):
             cursor1 = db_1.cursor()
             cursor1.execute("UPDATE banknotes_qty SET quantity = ?"
                             "WHERE nominal = ?", [qty, nominal_1])
+        logger(user, f'banknotes UAH {nominal_1} set', qty)
         print('ATM banknotes balance changed!')
         input('Press any key and (or just) ENTER to back main menu')
         clear()
@@ -500,13 +498,6 @@ def change_banknotes_balance_menu(user):
     clear()
     print('Choose banknote nominal to change quantity')
     counter = 1
-    nominals = banknotes_list
-    # with sqlite3.connect(atm_data) as db:
-    #     cursor = db.cursor()
-    #     for nominal, _ in cursor.execute("SELECT * FROM banknotes_qty"):
-    #         print(f'{counter}. UAH {nominal}')
-    #         nominals.append(nominal)
-    #         counter += 1
     for banknote in banknotes_list:
         print(f'{counter}. UAH {banknote}')
         counter += 1
@@ -516,19 +507,24 @@ def change_banknotes_balance_menu(user):
     for _ in range(input_attempts):
         user_choice_1 = input('Enter your choice: ')
         user_choice_1 = determine_value(user_choice_1)
-        if user_choice_1 in range(len(nominals)):
-            attmp = input_attempts
+        if user_choice_1 in range(len(banknotes_list) + 1):
+            attmps = input_attempts
             for _ in range(input_attempts):
-                user_choice_2 = input(f'Enter {nominals[user_choice_1 - 1]} banknotes qty to set: ')
+                user_choice_2 = input(f'Enter {banknotes_list[user_choice_1 - 1]} '
+                                      f'banknotes qty to set: ')
                 user_choice_2 = determine_value(user_choice_2)
                 if user_choice_2 < 0:
                     print('You can\'t set quantity less then zero!')
-                    attmp -= 1
-                    print(f'Try again! {attmp} attempts left.')
+                    attmps -= 1
+                    print(f'Try again! {attmps} attempts left.')
                     sleep(1)
                     continue
                 else:
-                    change_banknotes_qty(nominals[user_choice_1 - 1], user_choice_2)
+                    change_banknotes_qty(banknotes_list[user_choice_1 - 1],
+                                         user_choice_2)
+        elif user_choice_1 == 0:
+            clear()
+            admin_menu(user)
         else:
             attempt -= 1
             print(f'Wrong input! Try again! {attempt} attempts left.')
