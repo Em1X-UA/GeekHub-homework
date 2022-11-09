@@ -85,60 +85,11 @@ def try_again_or_start(func):
 def register():
     """Obviously this function can add new users"""
 
-    def check_name_password(name, password):
-        """Checking name length and password security for new users"""
-
-        name_status = f'Name "{name}" status is: '
-        password_status = 'Password status: '
-
-        try:
-            if not 4 <= len(name) <= 50:
-                raise NameLenException('Name length must be >= 4 and <= 50')
-            if not 8 <= len(password) <= 50:
-                raise PasswordLenException('Password should be '
-                                           '>= 8 and <= 50 symbols')
-            if not [x for x in password if x.isdigit()]:
-                raise PasswordSecurityException('Password must have '
-                                                'at list one digit')
-            if ('.' not in password) and ('_' not in password):
-                raise PasswordStrongSecurityException('Password must have '
-                                                      '"_" or "." symbol')
-        except NameLenException as err:
-            name_status += str(err)
-            password_status += 'Please fix NAME first!'
-        except PasswordLenException as err:
-            password_status += str(err)
-        except PasswordSecurityException as err:
-            password_status += str(err)
-        except PasswordStrongSecurityException as err:
-            password_status += str(err)
-        else:
-            name_status += 'OK'
-            password_status += 'OK'
-            return {name: password}
-        finally:
-            clear()
-            print(name_status)
-            print(password_status)
-            sleep(1)
-            clear()
-        try_again_or_start(register)
-
-    def confirm_password(some_password):
-        attempts_left = input_attempts
-        for _ in range(input_attempts):
-            input_confirm = input('Please confirm your password: ')
-            if some_password == input_confirm:
-                print('Password confirmed')
-                return True
-            attempts_left -= 1
-            print(f'Incorrect password. {attempts_left} attempts left.')
-        print('Error. But you can try register again.')
-        try_again_or_start(register)
-
     check_file(atm_data)
 
     user_login = input('Enter your login to register: ')
+
+    # checking for same names in db
     with sqlite3.connect(atm_data) as db:
         cursor = db.cursor()
         cursor.execute("SELECT user FROM users_data WHERE user = ?", [user_login])
@@ -147,10 +98,76 @@ def register():
             print('Try to register again?')
             try_again_or_start(register)
 
+    # checking name length
+    name_status = f'Name "{user_login}" status is: '
+    name_is_ok = True
+    try:
+        if not 4 <= len(user_login) <= 50:
+            raise NameLenException('Name length must be >= 4 and <= 50')
+    except NameLenException as err:
+        name_status += str(err)
+        name_is_ok = False
+    else:
+        name_status += 'OK'
+    finally:
+        clear()
+        print(name_status)
+        sleep(1)
+        if not name_is_ok:
+            try_again_or_start(register)
+        clear()
+
     user_password = input('Enter your password (must have >= 8 and <= 50 '
                           'symbols, at least 1 digit, and "_" or "." symbol): ')
-    check_name_password(user_login, user_password)
-    confirm_password(user_password)
+
+    # password security checking
+    password_status = 'Password status: '
+    password_is_ok = True
+    try:
+        if not 8 <= len(user_password) <= 50:
+            raise PasswordLenException('Password should be '
+                                       '>= 8 and <= 50 symbols')
+        if not [x for x in user_password if x.isdigit()]:
+            raise PasswordSecurityException('Password must have '
+                                            'at list one digit')
+        if ('.' not in user_password) and ('_' not in user_password):
+            raise PasswordStrongSecurityException('Password must have '
+                                                  '"_" or "." symbol')
+    except PasswordLenException as err:
+        password_status += str(err)
+        password_is_ok = False
+    except PasswordSecurityException as err:
+        password_status += str(err)
+        password_is_ok = False
+    except PasswordStrongSecurityException as err:
+        password_status += str(err)
+        password_is_ok = False
+    else:
+        password_status += 'OK'
+    finally:
+        clear()
+        print(password_status)
+        sleep(1)
+        if not password_is_ok:
+            try_again_or_start(register)
+        clear()
+
+    # password confirmation
+    attempts_left = input_attempts
+    password_confirm = False
+    for _ in range(input_attempts):
+        input_confirm = input('Please confirm your password: ')
+        if user_password == input_confirm:
+            print('Password confirmed')
+            password_confirm = True
+            break
+        attempts_left -= 1
+        print(f'Incorrect password. {attempts_left} attempts left.')
+    if not password_confirm:
+        print('Error. You can try register again.')
+        sleep(1)
+        clear()
+        try_again_or_start(register)
 
     with sqlite3.connect(atm_data) as db:
         cursor = db.cursor()
@@ -175,7 +192,8 @@ def login_user():
         with sqlite3.connect(atm_data) as db:
             cursor = db.cursor()
 
-            cursor.execute("SELECT user FROM users_data WHERE user = ?", [input_login])
+            cursor.execute("SELECT user FROM users_data "
+                           "WHERE user = ?", [input_login])
             if cursor.fetchone() is None:
                 attempts_left -= 1
                 print(f'Incorrect login. {attempts_left} attempts left.')
@@ -192,13 +210,12 @@ def login_user():
                     sleep(2)
                     clear()
 
-                    collector_status = cursor.execute("SELECT is_collector "
-                                                      "FROM users_data "
-                                                      "WHERE user = ?", [input_login])
-                    if collector_status.__next__()[0] == '1':
+                    cursor.execute("SELECT is_collector FROM users_data "
+                                   "WHERE user = ?", [input_login])
+                    if cursor.fetchone()[0] == '1':
                         return admin_menu(input_login)
                     else:
-                        return input_login
+                        return user_menu(input_login)
     raise LoginFailedException('Error. All attempts failed. Please contact the bank!')
 
 
@@ -352,9 +369,15 @@ def withdraw_money(user):
 
     attempts = input_attempts
     for _ in range(input_attempts):
-        print('Enter the amount, you want to withdraw! (or 0 to back main menu)')
+        print('Enter the amount, you want to withdraw!')
+        if attempts < input_attempts:
+            print('Or input "0" top back main menu!')
         user_input = input(f'The amount must be a multiple '
                            f'of {min_banknote}!\nEnter: ')
+        if attempts < input_attempts:
+            if user_input == '0':
+                clear()
+                user_menu(user)
 
         try:
             user_input = int(user_input)
@@ -398,8 +421,15 @@ def top_up_balance(user):
     attempts = input_attempts
     for _ in range(input_attempts):
         print('Enter the amount by which you want to top up your account.')
+        if attempts < input_attempts:
+            print('Or input "0" top back main menu!')
         user_input = input(f'The minimum banknote for top-up is {min_banknote}!'
                            f'\nEnter: ')
+        if attempts < input_attempts:
+            if user_input == '0':
+                clear()
+                user_menu(user)
+
         try:
             user_input = int(user_input)
             if user_input <= 0:
@@ -567,8 +597,7 @@ def start():
     clear()
     greetings()
     check_file(atm_data)
-    current_user = login_user()
-    user_menu(current_user)
+    login_user()
 
 
 if __name__ == '__main__':
