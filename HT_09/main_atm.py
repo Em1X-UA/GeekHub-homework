@@ -332,16 +332,16 @@ def check_logs(user):
                 print(f'Operation: {operation}')
                 print(f'Balance change: {balance_changes}')
                 print('=======================')
-        collector_status = cursor.execute("SELECT is_collector "
-                                          "FROM users_data "
-                                          "WHERE user = ?", [user])
+        cursor.execute("SELECT is_collector FROM users_data WHERE user = ?", [user])
+        collector_status = cursor.fetchone()[0]
+
     input('Press any key and (or just) ENTER to back main menu')
     clear()
 
-    if collector_status.__next__()[0] == '1':
+    if collector_status == '1':
         return admin_menu(user)
     else:
-        user_menu(user)
+        return user_menu(user)
 
 
 def determine_value(num):
