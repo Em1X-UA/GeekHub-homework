@@ -26,21 +26,22 @@ class Calc:
 
     def __init__(self):
         self.last_result = None
+        self.current_result = None
         self.result = None
 
     def add(self, num1, num2):
         self.result = num1 + num2
-        self.last_result = self.result
+        self.result_change()
         return self.result
 
     def subtraction(self, num1, num2):
         self.result = num1 - num2
-        self.last_result = self.result
+        self.result_change()
         return self.result
 
     def multiplying(self, num1, num2):
         self.result = num1 * num2
-        self.last_result = self.result
+        self.result_change()
         return self.result
 
     def division(self, num1, num2):
@@ -48,8 +49,12 @@ class Calc:
             self.result = num1 / num2
         except ZeroDivisionError as err:
             self.result = err
-        self.last_result = self.result
+        self.result_change()
         return self.result
+
+    def result_change(self):
+        self.last_result = self.current_result
+        self.current_result = self.result
 
 
 if __name__ == '__main__':
@@ -58,15 +63,15 @@ if __name__ == '__main__':
     res = Calc()
 
     print(res.last_result)
-    print(res.add(2, 2))
+    print(res.add(1, 1))
+    print('==================')
+
+    print(res.last_result)
+    print(res.multiplying(2, 3))
     print('==================')
 
     print(res.last_result)
     print(res.subtraction(5, 4))
-    print('==================')
-
-    print(res.last_result)
-    print(res.multiplying(5, 5))
     print('==================')
 
     print(res.last_result)
