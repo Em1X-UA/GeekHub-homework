@@ -82,7 +82,6 @@ class Admin:
         clear()
         return self.user_menu()
 
-    # check working....
     def check_all_logs(self):
         clear()
         print(f'---All users transactions history---')
