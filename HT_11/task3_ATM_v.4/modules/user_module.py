@@ -77,6 +77,7 @@ class User:
                     raise ValueError
                 else:
                     banknotes = Atm.count_cash(user_input)
+                    print(banknotes)
                     check_sum = sum([nominal * qty for nominal, qty in banknotes.items()])
                     if check_sum != user_input:
                         print('Looks like not enough banknotes in ATM. \n'

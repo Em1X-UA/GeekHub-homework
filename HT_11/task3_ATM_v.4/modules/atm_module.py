@@ -104,8 +104,9 @@ class Atm:
         clear()
 
     @staticmethod
-    def count_cash(amount):
-        """greedy algorithm"""
+    def greedy_algorithm(amount):
+        """greedy cash count algorithm"""
+
         available = Atm.available_banknotes()
         banknotes = sorted(available.keys(), reverse=True)
         banknotes_count = {}
@@ -120,6 +121,49 @@ class Atm:
                     banknotes_count.update({banknote: x})
                     amount -= banknote * x
         return banknotes_count
+
+    @staticmethod
+    def dynamic_algorithm(amount):
+        available = Atm.available_banknotes()
+        all_banknotes = []
+        for nominal, qty in available.items():
+            for _ in range(qty):
+                all_banknotes.append(nominal)
+        all_banknotes.sort(reverse=True)
+
+        sums = {0: 0}
+        for banknote in all_banknotes:
+            new_sums = {}
+            for sum_ in sums.keys():
+                new_sum = sum_ + banknote
+                if new_sum > amount:
+                    continue
+                elif new_sum not in sums.keys():
+                    new_sums[new_sum] = banknote
+            sums.update(new_sums)
+
+            if amount in sums.keys():
+                break
+        remainder = amount
+        taken_banknotes = []
+        while remainder > 0:
+            taken_banknotes.append(sums[remainder])
+            remainder -= sums[remainder]
+        result = {nominal: taken_banknotes.count(nominal)
+                  for nominal in taken_banknotes}
+        return result
+
+    @staticmethod
+    def count_cash(amount):
+        greedy_res = Atm.greedy_algorithm(amount)
+        result = greedy_res
+        greedy_sum = sum([nominal * qty for nominal, qty in greedy_res.items()])
+        if greedy_sum != amount:
+            dynamic_res = Atm.dynamic_algorithm(amount)
+            dynamic_sum = sum([nominal * qty for nominal, qty in dynamic_res.items()])
+            if dynamic_sum == amount:
+                result = dynamic_res
+        return result
 
     @staticmethod
     def cash_reduce(banknotes: dict):
