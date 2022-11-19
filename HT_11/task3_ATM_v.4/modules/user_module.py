@@ -39,7 +39,7 @@ class User:
 
     def check_balance(self):
         user = self.name
-        balance = list(Atm.get_user_balance(user))
+        balance = Atm.get_user_balance(user)
         print(f'You have {balance} UAH\n')
         input('Press any key and (or just) ENTER to back main menu')
         return self.user_menu()
