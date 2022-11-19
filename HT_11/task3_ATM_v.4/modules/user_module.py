@@ -39,7 +39,7 @@ class User:
 
     def check_balance(self):
         user = self.name
-        balance = Atm.get_user_balance(user)
+        balance = list(Atm.get_user_balance(user))
         print(f'You have {balance} UAH\n')
         input('Press any key and (or just) ENTER to back main menu')
         return self.user_menu()
@@ -47,7 +47,7 @@ class User:
     def withdraw_money(self):
         clear()
         user = self.name
-        min_banknote = min(Atm.available_banknotes())
+        banknotes = ', '.join([str(x) for x in Atm.available_banknotes().keys()])
 
         attempts = input_attempts
         for _ in range(input_attempts):
@@ -55,7 +55,7 @@ class User:
             if attempts < input_attempts:
                 print('Or input "0" top back main menu!')
 
-            print(f'The amount must be a multiple of {min_banknote}!')
+            print(f'ATM has {banknotes} banknotes')
             user_input = get_user_input()
             if attempts < input_attempts:
                 if user_input == 0:
@@ -66,9 +66,6 @@ class User:
                 if user_input > Atm.get_user_balance(user):
                     print('You don\'t gave enough money!')
                     raise ValueError
-                elif user_input % min_banknote != 0:
-                    print('Impossible to withdraw funds with existing banknotes: ')
-                    raise ValueError
                 elif user_input > Atm.atm_balance():
                     print('Sum is too much! \nATM doesn\'t have enough money!')
                     raise ValueError
@@ -77,7 +74,6 @@ class User:
                     raise ValueError
                 else:
                     banknotes = Atm.count_cash(user_input)
-                    print(banknotes)
                     check_sum = sum([nominal * qty for nominal, qty in banknotes.items()])
                     if check_sum != user_input:
                         print('Looks like not enough banknotes in ATM. \n'

@@ -146,12 +146,15 @@ class Atm:
                 break
         remainder = amount
         taken_banknotes = []
-        while remainder > 0:
-            taken_banknotes.append(sums[remainder])
-            remainder -= sums[remainder]
-        result = {nominal: taken_banknotes.count(nominal)
-                  for nominal in taken_banknotes}
-        return result
+        try:
+            while remainder > 0:
+                taken_banknotes.append(sums[remainder])
+                remainder -= sums[remainder]
+            result = {nominal: taken_banknotes.count(nominal)
+                      for nominal in taken_banknotes}
+            return result
+        except KeyError:
+            return {0: 0}
 
     @staticmethod
     def count_cash(amount):
