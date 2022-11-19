@@ -31,7 +31,7 @@ class User:
                 return self.top_up_balance()
             case 4:
                 return self.check_logs()
-            case '0':
+            case 0:
                 print(f'Goodbye {self.name}!')
                 slp()
                 clear()
@@ -47,7 +47,8 @@ class User:
     def withdraw_money(self):
         clear()
         user = self.name
-        banknotes = ', '.join([str(x) for x in Atm.available_banknotes().keys()])
+        min_banknote = min(Atm.available_banknotes().keys())
+        atm_banknotes = ', '.join([str(x) for x in Atm.available_banknotes().keys()])
 
         attempts = input_attempts
         for _ in range(input_attempts):
@@ -55,16 +56,20 @@ class User:
             if attempts < input_attempts:
                 print('Or input "0" top back main menu!')
 
-            print(f'ATM has {banknotes} banknotes')
+            print(f'ATM has {atm_banknotes} banknotes')
             user_input = get_user_input()
             if attempts < input_attempts:
                 if user_input == 0:
                     clear()
                     return self.user_menu()
+            attempts -= 1
 
             try:
                 if user_input > Atm.get_user_balance(user):
                     print('You don\'t gave enough money!')
+                    raise ValueError
+                elif user_input < min_banknote:
+                    print(f'You can\'t withdraw amount less then {min_banknote}!')
                     raise ValueError
                 elif user_input > Atm.atm_balance():
                     print('Sum is too much! \nATM doesn\'t have enough money!')
@@ -96,7 +101,6 @@ class User:
                     return self.user_menu()
 
             except ValueError:
-                attempts -= 1
                 print(f'Incorrect amount entered. {attempts} attempts left.')
                 slp()
                 clear()
