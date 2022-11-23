@@ -23,7 +23,7 @@ class Transaction:
         self._amount = amount
         self._date = date
         self._currency = currency
-        self._usd_conversion_rate = usd_conversion_rate
+        self._usd_conversion_rate = 1 / usd_conversion_rate
         self._description = description
 
     @property
@@ -40,6 +40,7 @@ class Transaction:
 
     @property
     def usd_conversion_rate(self):
+
         return self._usd_conversion_rate
 
     @property
@@ -64,7 +65,7 @@ def main():
 
     print('=================')
 
-    trans2 = Transaction(10000, dt.today(), 'UAH', 0.0375)
+    trans2 = Transaction(10000, dt.today(), 'UAH', 37.5)
     trans2_acts = [trans2.amount, trans2.date, trans2.currency,
                    trans2.usd_conversion_rate, trans2.description, trans2.usd]
     for el in trans2_acts:
