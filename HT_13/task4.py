@@ -18,7 +18,7 @@ def main():
     a = MyList(range(1, 5))
     print(a)  # --> [1, 2, 3, 4]
 
-    print(f'{a[7]=}')  # --> IndexError
+    # print(f'{a[0]=}')  # --> IndexError
     print(f'{a[1]=}')  # --> 1
     print(f'{a[2]=}')  # --> 2
 

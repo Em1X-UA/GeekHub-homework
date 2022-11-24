@@ -40,7 +40,6 @@ class Transaction:
 
     @property
     def usd_conversion_rate(self):
-
         return self._usd_conversion_rate
 
     @property
