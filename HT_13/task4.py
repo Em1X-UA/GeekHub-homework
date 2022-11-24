@@ -10,7 +10,8 @@ class MyList(list):
     def __getitem__(self, index):
         if index == 0:
             raise IndexError('Index start from 1!')
-        index -= 1
+        if index > 0:
+            index -= 1
         return super().__getitem__(index)
 
 
@@ -19,6 +20,7 @@ def main():
     print(a)  # --> [1, 2, 3, 4]
 
     # print(f'{a[0]=}')  # --> IndexError
+    print(f'{a[-1]=}')  # --> 4
     print(f'{a[1]=}')  # --> 1
     print(f'{a[2]=}')  # --> 2
 
