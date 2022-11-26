@@ -1,3 +1,9 @@
+"""
+1. Додайте до банкомату меню отримання поточного курсу валют
+за допомогою requests (можна використати відкрите API ПриватБанку)
+"""
+
+
 from settings import atm_data
 from modules.system_modules import clear, slp, get_user_choice, check_file
 from modules.verification import login_user, register
