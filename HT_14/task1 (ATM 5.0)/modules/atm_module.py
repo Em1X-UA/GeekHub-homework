@@ -242,6 +242,7 @@ class Atm:
         """
         Get rates from api and return dict with currency as key and tuple
         with [0] element as BUY rate, [1] element as SALE rate, as value
+        api: https://api.privatbank.ua/#p24/exchange
         """
 
         url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=5'
