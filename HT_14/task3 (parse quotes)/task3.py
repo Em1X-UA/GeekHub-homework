@@ -24,7 +24,7 @@ class Quote:
 class QuotesScraper:
     BASE_URL = 'http://quotes.toscrape.com'
     url = urljoin(BASE_URL, 'page/')
-    pages_to_parse = 20
+    pages_to_parse = 10
     RESULT_CSV = 'quotes.csv'
     QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
@@ -74,8 +74,8 @@ class QuotesScraper:
             writer.writerow(self.QUOTE_FIELDS)
             writer.writerows([astuple(quote) for quote in quotes])
             # for quote in quotes:
-            #     # writer.writerow((astuple(quote)))
             #     writer.writerow([v for _, v in quote.__dict__.items()])
+            #     # writer.writerow((astuple(quote)))
         return
 
 
