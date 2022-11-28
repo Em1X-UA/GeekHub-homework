@@ -65,10 +65,6 @@ class ExchangeRatesArchive:
                   'and separate by a space, if you want check range\n'
                   'As separator in date you can use ".", "/" or "-"\n')
 
-            # user_input = '05.04-2020 2020/04-06'
-            # user_input = '2020/03-16'
-            # user_input = 'hello'
-
             user_input = input('Enter dates you want to check:')
             if user_input == '':
                 wrong_input()
