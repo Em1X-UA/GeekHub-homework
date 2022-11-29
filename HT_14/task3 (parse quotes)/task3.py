@@ -9,6 +9,7 @@
 import csv
 from dataclasses import dataclass, fields, astuple
 from urllib.parse import urljoin
+
 import requests
 from bs4 import BeautifulSoup as Bs
 
@@ -19,6 +20,7 @@ class Quote:
     author: str
     author_born_date: str
     author_born_place: str
+    tags: str
 
 
 class QuotesScraper:
@@ -35,10 +37,12 @@ class QuotesScraper:
 
         quotes_list = []
         for page_number in range(1, self.pages_to_parse + 1):
+            print(f'Getting data from {page_number} page.')
             page = requests.get(urljoin(self.url, str(page_number))).content
             soup = Bs(page, 'lxml')
             # soup = Bs(page, 'html.parser')
             quotes_list.extend(soup.select('.quote'))
+        print('Data received. Processing...')
         return [self.parse_single_quote(quote) for quote in quotes_list]
 
     def parse_single_quote(self, product: Bs) -> Quote:
@@ -51,7 +55,8 @@ class QuotesScraper:
             quote=product.select_one('.text').text[1:-1],
             author=product.select_one('.author').text,
             author_born_date=born_date,
-            author_born_place=born_place
+            author_born_place=born_place,
+            tags=product.select_one('.keywords')['content']
         )
 
     def pars_author(self, link):
@@ -60,6 +65,7 @@ class QuotesScraper:
         """
 
         soup = Bs(requests.get(urljoin(self.BASE_URL, link)).content, 'lxml')
+        # soup = Bs(requests.get(urljoin(self.BASE_URL, link)).content, 'html.parser')
         born_date = soup.select_one('.author-born-date').text
         born_place = soup.select_one('.author-born-location').text.replace('in ', '')
         return born_date, born_place

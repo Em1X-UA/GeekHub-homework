@@ -1,5 +1,6 @@
 import sqlite3
 from random import randint, choice
+
 from settings import input_attempts, atm_data
 from modules.system_modules import clear, slp, get_user_choice, check_file
 from modules.atm_module import Atm

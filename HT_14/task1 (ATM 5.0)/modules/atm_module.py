@@ -1,8 +1,10 @@
 import sqlite3
 from datetime import datetime
+
+import requests
+
 from settings import atm_data
 from modules.system_modules import clear, determine_value
-import requests
 
 
 class Atm:

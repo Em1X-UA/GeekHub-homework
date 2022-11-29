@@ -6,6 +6,7 @@ File contains often used functions
 import os
 import sqlite3
 from time import sleep
+
 from settings import input_attempts, sleep_time, banknotes_list, atm_data
 
 

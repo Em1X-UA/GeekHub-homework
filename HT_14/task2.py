@@ -9,9 +9,10 @@
 """
 
 
-from datetime import datetime, timedelta
-from time import sleep
 import os
+from time import sleep
+from datetime import datetime, timedelta
+
 import requests
 
 
@@ -103,14 +104,15 @@ class ExchangeRatesArchive:
         Checking dates list for availability in API.
         """
 
+        date_list = [date.date() for date in date_list]
         api_years = 4
         first_available_in_api = datetime.today() - timedelta(days=api_years * 365)
         for date in date_list:
-            if date > datetime.today():
+            if date > datetime.today().date():
                 print('You can\'t watch in tomorrow '
                       '(If you\'re not Klychko, of course.')
                 raise ValueError
-            elif date < first_available_in_api:
+            elif date < first_available_in_api.date():
                 print(f'Used API saves value in a {api_years} years period.')
                 print(f'First available date: {first_available_in_api}')
                 raise ValueError

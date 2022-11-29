@@ -36,9 +36,9 @@ def start_menu():
     user = ()
     match user_choice:
         case 1:
-            user = (login_user())
+            user = login_user()
         case 2:
-            user = (register())
+            user = register()
         case 0:
             print('Goodbye!')
             slp()
