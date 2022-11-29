@@ -114,7 +114,7 @@ class ExchangeRatesArchive:
                 raise ValueError
             elif date < first_available_in_api.date():
                 print(f'Used API saves value in a {api_years} years period.')
-                print(f'First available date: {first_available_in_api}')
+                print(f'First available date: {first_available_in_api.date()}')
                 raise ValueError
 
     def create_rates_list(self, dates: list) -> list:
