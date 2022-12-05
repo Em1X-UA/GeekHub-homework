@@ -32,8 +32,11 @@ from modules.rozetka_api import RozetkaAPI
 from modules.data_operations import CsvOperations, DataBaseOperations
 
 
+ID_LIST_PATH = 'id_list.csv'
+
+
 def main():
-    id_list = CsvOperations.read_csv('id_list.csv')
+    id_list = CsvOperations.read_csv(ID_LIST_PATH)
     db = DataBaseOperations()
     rztk = RozetkaAPI()
 
