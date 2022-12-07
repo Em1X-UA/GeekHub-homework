@@ -163,12 +163,12 @@ class ExpiredDomainsParser:
     @staticmethod
     def pars_birth_date(a_birth_date: Bs):
         """
-        Parse date and return as datetime.date object
+        Parse date and return it.
         """
         try:
-            return datetime.strptime(
-                re.search('\d{4}-\d{2}-\d{2}', a_birth_date.select_one(
-                    'a')['title'])[0], '%Y-%m-%d').date()
+            date_string = a_birth_date.select_one('a')['title']
+            parsed_date = re.search('\d{4}-\d{2}-\d{2}', date_string)[0]
+            return datetime.strptime(parsed_date, '%Y-%m-%d').date()
         except TypeError:
             return '-'
 
