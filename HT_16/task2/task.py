@@ -7,33 +7,26 @@
 то файл буде називатися c80003_products.csv)
 """
 
-#
-# from scrapy.crawler import CrawlerProcess
-#
-# from rozetka_categories.spiders.rozetka import RozetkaSpider
+
+from scrapy.crawler import CrawlerProcess
+
+from rozetka_categories.spiders.rozetka import RozetkaSpider
 
 
-CATEGORY = 'mobile-phones/c80003/'
-
-
-"""
-WILL BE AVAILABLE ASAP
-SORRY FOR THE DELAY
-"""
+CATEGORY = 'digital_pianos/c284868/'
 
 
 def main():
     category_id = CATEGORY.split('/')[1]
-    print(category_id)
-    # process = CrawlerProcess(settings={'FEEDS': {f'{category_id}_products.csv':
-    #     {
-    #         'format': 'csv',
-    #         'header': True
-    #     }
-    # }})
+    process = CrawlerProcess(settings={'FEEDS': {f'{category_id}_products.csv':
+        {
+            'format': 'csv',
+            'header': True
+        }
+    }})
 
-    # process.crawl(RozetkaSpider)
-    # process.start()
+    process.crawl(RozetkaSpider, category=CATEGORY)
+    process.start()
 
 
 if __name__ == '__main__':
