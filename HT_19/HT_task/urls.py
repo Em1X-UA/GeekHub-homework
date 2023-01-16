@@ -18,9 +18,16 @@ from django.urls import path
 
 from scraper import views
 
+
+app_name = 'scraper'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home),
-    path('my_products/', views.scraper, name='scraper'),
-    path('products/<int:pk>/', views.product_data, name="product_data"),
+    path('add_products/', views.add_products, name='add_products'),
+    path('my_products/', views.my_products, name='my_products'),
+    path('scraper/', views.scraper, name='scraper'),
+    # path('my_products/<int:pk>/', views.product_data, name="product_data"),
+    path('<int:pk>/', views.product_data, name="product_data"),
 ]
+

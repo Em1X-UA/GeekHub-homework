@@ -13,3 +13,7 @@ class Product(models.Model):
 
 class IdObject(models.Model):
     item_id = models.CharField(max_length=15, default='')
+
+
+class IdString(models.Model):
+    input_string = models.CharField(max_length=10_000)

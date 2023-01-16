@@ -8,13 +8,8 @@
 {% for item in products %}
 <tr>
     <td>{{ item.item_id }}</td>
-    <td>{{ item.title }}</td>
-    <br>
-{#    <td>{{ item.old_price }}</td>#}
-{#    <td>{{ item.current_price }}</td>#}
-{#    <td>{{ item.href }}</td>#}
-{#    <td>{{ item.brand }}</td>#}
-{#    <td>{{ item.category }}</td>#}
+    <td>{{ item.price }}</td>
+{#    <a href="{% url 'scraper:product_data' product.id %}"><button>{{ product.title }}</button></a>#}
 </tr>
 {% endfor %}
 </body>

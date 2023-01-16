@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{ product.title }}</title>
 </head>
 <body>
-{% for item in products %}
+<h1>{{ product.title }}</h1>
 <tr>
-    <td>{{ item.item_id }}</td>
-    <td>{{ item.title }}</td>
-    <td>{{ item.old_price }}</td>
-    <td>{{ item.current_price }}</td>
-    <td>{{ item.href }}</td>
-    <td>{{ item.brand }}</td>
-    <td>{{ item.category }}</td>
+    <td>{{ product.item_id }}</td>
+    <td>{{ product.title }}</td>
+    <td>{{ product.old_price }}</td>
+    <td>{{ product.current_price }}</td>
+    <td>{{ product.href }}</td>
+    <td>{{ product.brand }}</td>
+    <td>{{ product.category }}</td>
 </tr>
 {% endfor %}
 </body>
