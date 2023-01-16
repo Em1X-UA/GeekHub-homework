@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from scraper import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.home),
+    path('my_products/', views.scraper, name='scraper'),
+    path('products/<int:pk>/', views.product_data, name="product_data"),
 ]
