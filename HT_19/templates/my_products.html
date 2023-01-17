@@ -5,11 +5,13 @@
     <title>My Products</title>
 </head>
 <body>
+<h1>My Product list</h1>
 {% for item in products %}
 <tr>
-    <td>{{ item.item_id }}</td>
-    <td>{{ item.price }}</td>
-{#    <a href="{% url 'scraper:product_data' product.id %}"><button>{{ product.title }}</button></a>#}
+    <a href="{% url 'product_data' pk=item.pk %}"><button>
+        {{ item.title }}. Price: {{ item.current_price }} UAH
+    </button></a>
+    <br>
 </tr>
 {% endfor %}
 </body>

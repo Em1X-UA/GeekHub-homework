@@ -7,14 +7,23 @@
 <body>
 <h1>{{ product.title }}</h1>
 <tr>
-    <td>{{ product.item_id }}</td>
-    <td>{{ product.title }}</td>
-    <td>{{ product.old_price }}</td>
-    <td>{{ product.current_price }}</td>
-    <td>{{ product.href }}</td>
-    <td>{{ product.brand }}</td>
-    <td>{{ product.category }}</td>
+    <td>Item name: {{ product.title }}</td>
+    <br>
+    <td>Item ID: {{ product.item_id }}</td>
+    <br>
+    <td>Current price: {{ product.current_price }} UAH</td>
+    <br>
+    <td>Old price: {{ product.old_price }} UAH</td>
+    <br>
+    <td>Product URL: <a href="{{ product.href }}">{{ product.href }}</a></td>
+    <br>
+    <td>Brand: {{ product.brand }}</td>
+    <br>
+    <td>Category: {{ product.category }}</td>
 </tr>
-{% endfor %}
+<br>
+<br>
+<a href="{% url 'add_products' %}"><button>Add products</button></a>
+<a href="{% url 'my_products' %}"><button>Watch all products</button></a>
 </body>
 </html>
