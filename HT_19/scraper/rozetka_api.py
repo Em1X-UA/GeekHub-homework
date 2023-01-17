@@ -2,8 +2,6 @@ from urllib.parse import urljoin
 
 import requests
 
-# from models import Product
-
 
 class RozetkaAPI:
     """
@@ -20,7 +18,6 @@ class RozetkaAPI:
         response = requests.get(self._BASE_URL, params={"goodsId": item_id})
         data = response.json()['data']
 
-        # return Product.objects.create(
         return dict(
             item_id=data['id'],
             title=data['title'],

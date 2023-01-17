@@ -18,7 +18,6 @@ def add_products(request):
 def scraper(request):
     response = request.GET.get('id_string')
     IdString.objects.create(input_string=response)
-    # Popen(['python', 'scraper/subscraper.py'])
     Popen(['python', 'subscraper.py'])
     return redirect(to=my_products)
 
