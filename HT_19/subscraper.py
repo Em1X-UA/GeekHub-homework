@@ -7,7 +7,7 @@ from scraper.rozetka_api import RozetkaAPI
 
 
 def parse_string():
-    string_object = IdString.objects.all()[0]
+    string_object = IdString.objects.first()
     response = string_object.input_string
     string_object.delete()
 
@@ -29,18 +29,18 @@ def parse_string():
 def main():
     rztk = RozetkaAPI()
     for product_id in parse_string():
-        if Product.objects.filter(item_id=product_id):
-            continue
         product = rztk.get_item_data(item_id=product_id)
-
-        Product.objects.create(
-            item_id=product['item_id'],
-            title=product['title'],
-            old_price=product['old_price'],
-            current_price=product['current_price'],
-            href=product['href'],
-            brand=product['brand'],
-            category=product['category']
+        Product.objects.update_or_create(
+            item_id=product_id,
+            defaults={
+                'item_id': product['item_id'],
+                'title': product['title'],
+                'old_price': product['old_price'],
+                'current_price': product['current_price'],
+                'href': product['href'],
+                'brand': product['brand'],
+                'category': product['category']
+            }
         )
 
 

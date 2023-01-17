@@ -1,5 +1,7 @@
 <h1>Add new products to scrape</h1>
-
+<a href="{% url 'my_products' %}"><button>Watch all products</button></a>
+<a href="{% url 'home' %}"><button>Back to the homepage</button></a>
+<br><br>
 <form action="{% url 'scraper' %}">
     <label>
         Please enter list of Rozetka products ID to scrape it:
@@ -14,4 +16,5 @@
     <br>
     <input type="submit" value="Add products">
 </form>
+
 
