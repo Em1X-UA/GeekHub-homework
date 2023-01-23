@@ -1,26 +1,13 @@
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <title>Rozetka products scraping service</title>#}
-{#</head>#}
-{#<body>#}
-{#<h1>Rozetka products scraping service</h1>#}
-{#<br>#}
-{#<a href="{% url 'add_products' %}"><button>Add products</button></a>#}
-{#<a href="{% url 'my_products' %}"><button>Watch all products</button></a>#}
-{#<a href="{% url 'cart' %}"><button>Cart</button></a>#}
-{#</body>#}
-{#</html>#}
-
 <body>
     <header class="page-header">
       <div class="container">
           <h1><a href="/">Rozetka products scraping service</a></h1>
       </div>
+        <hr>
         <a href="{% url 'add_products' %}"><button>Add new products</button></a>
         <a href="{% url 'my_products' %}"><button>All products list</button></a>
         <a href="{% url 'cart' %}"><button>Cart</button></a>
+        <hr>
     </header>
     <main class="container">
         <div class="row">

@@ -22,4 +22,3 @@ urlpatterns = [
     path('', include('scraper.urls')),
     path('cart/', include('cart.urls')),
 ]
-

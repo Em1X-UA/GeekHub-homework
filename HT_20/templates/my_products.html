@@ -7,9 +7,6 @@
 </head>
 <body>
 <h2>My Products list</h2>
-{#<a href="{% url 'add_products' %}"><button>Add products</button></a>#}
-{#<a href="{% url 'home' %}"><button>Back to the homepage</button></a>#}
-{#<br><br>#}
 {% for item in products %}
 <tr>
     <a href="{% url 'product_data' pk=item.pk %}"><button>

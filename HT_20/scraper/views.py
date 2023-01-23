@@ -2,6 +2,7 @@ from subprocess import Popen
 
 from django.shortcuts import render, redirect, get_object_or_404
 
+from scraper.forms import InCartProduct
 from scraper.models import Product, IdString
 
 
@@ -30,6 +31,10 @@ def my_products(request):
 
 def product_data(request, pk):
     product = get_object_or_404(Product, id=pk)
+    product_qty = 1 if product.sell_status == 'available' else 0
+    form = InCartProduct(initial={'internal_item_id': product.id,
+                                  'sell_status': product.sell_status,
+                                  'quantity': product_qty})
     return render(request=request,
                   template_name='product_data.html',
-                  context={'product': product})
+                  context={'product': product, 'form': form})

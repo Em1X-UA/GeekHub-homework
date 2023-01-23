@@ -8,25 +8,21 @@
 <body>
 <h2>{{ product.title }}</h2>
 <tr>
-    <td>Item name: {{ product.title }}</td>
-    <br>
-    <td>Item ID: {{ product.item_id }}</td>
-    <br>
-    <td>Current price: {{ product.current_price }} UAH</td>
-    <br>
-    <td>Old price: {{ product.old_price }} UAH</td>
-    <br>
-    <td>Sell status: {{ product.sell_status }}</td>
-    <br>
-    <td>Product URL: <a href="{{ product.href }}">{{ product.href }}</a></td>
-    <br>
-    <td>Brand: {{ product.brand }}</td>
-    <br>
+    <td>Item name: {{ product.title }}</td><br>
+    <td>Item ID: {{ product.item_id }}</td><br>
+    <td>Current price: {{ product.current_price }} UAH</td><br>
+    <td>Old price: {{ product.old_price }} UAH</td><br>
+    <td>Sell status: {{ product.sell_status }}</td><br>
+    <td>Product URL: <a href="{{ product.href }}">{{ product.href }}</a></td><br>
+    <td>Brand: {{ product.brand }}</td><br>
     <td>Category: {{ product.category }}</td>
 </tr>
-<br>
-<br>
-<a href="{% url 'add_products' %}"><button>Add products</button></a>
-<a href="{% url 'my_products' %}"><button>Watch all products</button></a>
+<hr>
+<form action="{% url 'add_to_cart' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add to you cart</button>
+    <br/>
+</form>
 </body>
 {% endblock %}
