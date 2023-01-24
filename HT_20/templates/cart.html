@@ -24,6 +24,11 @@
         </form>
 
         <hr>
+
+    {% empty %}
+        No items in your cart!
+    {% endfor %}
+    {% if sum_cost > 0 %}
         <h3>Total cost: {{ sum_cost }} UAH</h3>
         <hr>
         <form action="{% url 'clear_cart' %}" method="POST">
@@ -31,10 +36,6 @@
             <button type="submit">Clear cart!</button>
             <br/>
         </form>
-    {% empty %}
-        No items in your cart!
-    {% endfor %}
-
-
+    {% endif %}
 </body>
 {% endblock %}
