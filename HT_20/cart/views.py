@@ -12,7 +12,7 @@ def cart_page(request):
     except Exception:
         return render(request=request,
                       template_name='cart.html',
-                      context={'items': [], 'sum_cost': 0,})
+                      context={'items': [], 'sum_cost': 0})
     sum_cost = 0
 
     available_items = []
