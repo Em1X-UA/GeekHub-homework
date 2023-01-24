@@ -31,10 +31,16 @@ def my_products(request):
 
 def product_data(request, pk):
     product = get_object_or_404(Product, id=pk)
-    product_qty = 1 if product.sell_status == 'available' else 0
-    form = InCartProduct(initial={'internal_item_id': product.id,
-                                  'sell_status': product.sell_status,
-                                  'quantity': product_qty})
+    stock = True if product.sell_status == 'available' else False
+    form = InCartProduct(initial={
+        'internal_item_id': product.id,
+        'sell_status': product.sell_status,
+        'quantity': 1,
+    })
     return render(request=request,
                   template_name='product_data.html',
-                  context={'product': product, 'form': form})
+                  context={
+                      'product': product,
+                      'form': form,
+                      'stock': stock,
+                  })
