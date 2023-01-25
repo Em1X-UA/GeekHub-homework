@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.title }}</title>
+</head>
+<body>
+    <h2>{{ product.title }}</h2>
+    <tr>
+        <td>Item name: {{ product.title }}</td><br>
+        <td>Item ID: {{ product.item_id }}</td><br>
+        <td>Current price: {{ product.current_price }} UAH</td><br>
+        {% if product.old_price > product.current_price %}
+            <td>Old price: {{ product.old_price }} UAH</td><br>
+        {% endif %}
+        <td>Sell status: {{ product.sell_status }}</td><br>
+        <td>Product URL: <a href="{{ product.href }}">{{ product.href }}</a></td><br>
+        <td>Brand: {{ product.brand }}</td><br>
+        <td>Category: {{ product.category.category_title }}</td>
+    </tr>
+    <hr>
+    {% if stock %}
+        <form action="{% url 'add_to_cart' %}" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add to you cart</button>
+            <br/>
+        </form>
+    {% endif %}
+    {% if request.user.is_superuser %}
+        <hr>
+        <h3>SuperUser functions</h3>
+        <a href="{% url 'edit_product' pk=product.id %}"><button>Edit Product</button></a>
+        <br><br>
+        <form action="{% url 'delete_product' %}" method="POST">
+            {% csrf_token %}
+            {{ remove_form }}
+            <button type="submit">DELETE PRODUCT</button>
+            <br/>
+        </form>
+    {% endif %}
+</body>
+{% endblock %}

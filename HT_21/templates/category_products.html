@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>{{ category }}</title>
+</head>
+<body>
+    <h2>{{ category }}</h2>
+    {% for item in products %}
+        <tr>
+        <a href="{% url 'product_data' pk=item.pk %}"><button>
+            {{ item.title }}. Price: {{ item.current_price }} UAH
+        </button></a>
+        <br>
+        </tr>
+    {% endfor %}
+</body>
+{% endblock %}

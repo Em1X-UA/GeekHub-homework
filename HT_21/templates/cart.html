@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+</head>
+<body>
+    <h2>Cart</h2>
+    {% for item in items %}
+        <a href="{% url 'product_data' pk=item.pk %}">{{ item.title }}</a>
+        <p>Price: {{ item.current_price }} UAH</p>
+        <form action="{% url 'change_qty' %}" method="POST">
+            {% csrf_token %}
+            {{ item.in_cart_form }}
+            <button type="submit">Submit quantity</button>
+            <br/>
+        </form>
+        <form action="{% url 'remove_from_cart' %}" method="POST">
+            {% csrf_token %}
+            {{ item.form_remove }}
+            <button type="submit">Remove</button>
+            <br/>
+        </form>
+
+        <hr>
+
+    {% empty %}
+        No items in your cart!
+    {% endfor %}
+    {% if sum_cost > 0 %}
+        <h3>Total cost: {{ sum_cost }} UAH</h3>
+        <hr>
+        <form action="{% url 'clear_cart' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">Clear cart!</button>
+            <br/>
+        </form>
+    {% endif %}
+</body>
+{% endblock %}
