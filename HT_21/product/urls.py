@@ -4,9 +4,7 @@ from . import views as pr
 
 
 urlpatterns = [
-    # path('', pr.home, name='home'),
     path('add_products/', pr.add_products, name='add_products'),
-    # path('my_products/', pr.my_products, name='my_products'),
     path('', pr.my_products, name='my_products'),
     path('scraper/', pr.scraper, name='scraper'),
     path('my_products/<int:pk>/', pr.product_data, name="product_data"),
