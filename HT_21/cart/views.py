@@ -7,6 +7,10 @@ from product.models import Product
 
 
 def cart_page(request):
+    if not request.user.is_authenticated:
+        messages.error(request=request,
+                       message='Only authenticated users can use cart!')
+        return redirect(to='login')
     cart = request.session.get('cart')
     try:
         items = list(Product.objects.filter(id__in=cart.keys()))

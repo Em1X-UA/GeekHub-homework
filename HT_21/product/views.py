@@ -13,6 +13,19 @@ def not_superuser_msg(request):
     return messages.error(request=request, message=msg_text)
 
 
+def get_available_categories_list():
+    # delete empty categories
+    # Category.objects.filter(product__isnull=True).delete()
+    # categories = Category.objects.all()
+
+    # don't show empty categories, but don't delete it
+    categories = []
+    for category in Category.objects.filter(product__isnull=False):
+        if category not in categories:
+            categories.append(category)
+    return categories
+
+
 def add_products(request):
     if not request.user.is_superuser:
         not_superuser_msg(request)
@@ -33,16 +46,7 @@ def scraper(request):
 
 
 def my_products(request):
-    # delete empty categories
-    # Category.objects.filter(product__isnull=True).delete()
-    # categories = Category.objects.all()
-
-    # don't show empty categories, but don't delete it
-    categories = []
-    for category in Category.objects.filter(product__isnull=False):
-        if category not in categories:
-            categories.append(category)
-
+    categories = get_available_categories_list()
     return render(request=request,
                   template_name='my_products.html',
                   context={
@@ -71,11 +75,13 @@ def product_data(request, pk):
 
 def category_products(request, pk):
     category_title = Category.objects.filter(id=pk)[0].category_title
+    categories = get_available_categories_list()
     return render(request=request,
                   template_name='category_products.html',
                   context={
                       'products': Product.objects.filter(category_id=pk),
                       'category': category_title,
+                      'categories_list': categories,
                   })
 
 

@@ -6,6 +6,12 @@
     <title>{{ category }}</title>
 </head>
 <body>
+    <h2>Categories</h2>
+    {% for category in categories_list %}
+        <a href="{% url 'category_products' pk=category.pk %}">
+            <button>{{ category.category_title }} </button>
+        </a>
+    {% endfor %}
     <h2>{{ category }}</h2>
     {% for item in products %}
         <tr>
