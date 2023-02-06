@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>My Products</title>
+</head>
+<body>
+    <h2>Categories</h2>
+    {% for category in categories %}
+        <a href="{% url 'product:category_products' pk=category.pk %}">
+            <button>{{ category.category_title }} </button>
+        </a>
+    {% endfor %}
+    <hr>
+    <h2>My Products list</h2>
+    {% for item in products %}
+    <tr>
+        <a href="{% url 'product:product_data' pk=item.pk %}"><button>
+            {{ item.title }}. Price: {{ item.current_price }} UAH
+        </button></a>
+        <br>
+    </tr>
+    {% endfor %}
+</body>
+{% endblock %}

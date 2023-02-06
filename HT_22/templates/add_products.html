@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Add new products to scrape</h2>
+<form action="{% url 'product:scraper' %}">
+    <label>
+        Please enter list of Rozetka products ID to scrape it:
+        <br>
+        <textarea name="id_string"
+                  rows="10"
+                  cols="60"
+                  placeholder="Enter ID separated by comma, new line, semicolon or a space"></textarea>
+    </label>
+    <br>
+    <br>
+    <input type="submit" value="Add products">
+</form>
+{% endblock %}
+

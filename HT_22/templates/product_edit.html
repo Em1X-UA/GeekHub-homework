@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.title }}</title>
+</head>
+<body>
+    <h2>Edit: {{ product.title }}</h2>
+    <hr>
+        <form action="{% url 'product:edit_confirm' %}" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">CONFIRM CHANGES</button>
+            <br/>
+        </form>
+    {% if request.user.is_superuser %}
+        <hr>
+        <a href="{% url 'product:product_data' pk=product.id %}"><button>Cancel editing</button></a>
+        <br><br>
+        <form action="{% url 'product:delete_product' %}" method="POST">
+            {% csrf_token %}
+            {{ form.id }}
+            <button type="submit">DELETE PRODUCT</button>
+            <br/>
+        </form>
+    {% endif %}
+</body>
+{% endblock %}
