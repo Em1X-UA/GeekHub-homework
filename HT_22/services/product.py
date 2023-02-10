@@ -21,11 +21,11 @@ def superuser_only(function):
 def get_available_categories_list():
     # delete empty categories
     # Category.objects.filter(product__isnull=True).delete()
-    # categories = Category.objects.all()
+    # categories = Category.objects.all().values('id', 'category_title')
 
     # don't show empty categories, but don't delete it
     categories = []
-    for category in Category.objects.filter(product__isnull=False):
+    for category in Category.objects.filter(product__isnull=False).values('id', 'category_title'):
         if category not in categories:
             categories.append(category)
     return categories

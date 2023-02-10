@@ -1,16 +1,16 @@
 from django.contrib import messages
-from django.shortcuts import redirect, reverse
+from django.http import JsonResponse
 
 from product.forms import InCartProduct, RemoveForm, MAX_ADD_TO_CARTS_QTY
 from product.models import Product
 
 
-def authorized_only(function):
+def authenticated_only(function):
     def _inner(request, *args, **kwargs):
         if not request.user.is_authenticated:
             msg_text = 'Only authenticated users can use cart!'
             messages.error(request=request, message=msg_text)
-            return redirect(to='login')
+            return JsonResponse({'message': msg_text}, status=300)
             # raise PermissionDenied
         return function(request, *args, **kwargs)
     return _inner
@@ -22,29 +22,31 @@ def get_product_title(pk):
 
 def get_cart_context(request):
     try:
-        cart = request.session.get('cart', {})
-        items = list(Product.objects.filter(id__in=cart.keys()))
+        cart = request.session.get('cart')
+        session_cart = request.session.setdefault('cart', {})
+        items = Product.objects.filter(id__in=cart.keys()).values(
+            'id', 'title', 'sell_status', 'current_price'
+        )
+
         sum_cost = 0
         available_items = []
         removed_items = []
-        session_cart = request.session.setdefault('cart', {})
         for item in items:
-            quantity = cart[str(item.id)]
-            # remove unavailable items if user added it (maybe earlier)
-            if not item.sell_status:
-                removed_items.append(item.title)
-                del session_cart[f'{item.id}']
-                del item
+            if not item['sell_status']:
+                removed_items.append(item['title'])
+                del session_cart[str(item['id'])]
                 continue
 
-            available_items.append(item)
-            sum_cost += item.current_price * quantity
+            quantity = cart[str(item['id'])]
+            sum_cost += item['current_price'] * quantity
 
-            item.in_cart_form = InCartProduct(initial={
-                'internal_item_id': item.id,
+            item['in_cart_form'] = InCartProduct(initial={
+                'internal_item_id': item['id'],
                 'quantity': quantity,
             })
-            item.form_remove = RemoveForm(initial={'id': item.id})
+            item['form_remove'] = RemoveForm(initial={'id': item['id']})
+
+            available_items.append(item)
         if removed_items:
             message = f'Some products removed from your cart, due out of stock: ' \
                       f'{"; ".join(removed_items)}'
@@ -90,11 +92,11 @@ def remove_product_from_cart(request):
 def change_product_quantity_in_cart(request):
     form = InCartProduct(request.POST)
     if not form.is_valid():
-        messages.error(request=request, message='Too much quantity!')
-        return redirect(to=reverse(viewname='cart:cart'))
+        return 'Wrong quantity!', 400
     data = form.cleaned_data
 
     cart = request.session.setdefault('cart', {})
     cart.setdefault(str(data['internal_item_id']), 0)
     cart[str(data['internal_item_id'])] = data['quantity']
     request.session.modified = True
+    return 'Product quantity has been changed!', 200

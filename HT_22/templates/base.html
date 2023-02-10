@@ -3,6 +3,9 @@
     <div class="container">
         <h1><a href="/">MyShop</a></h1>
     </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
     <hr>
     <a href="{% url 'product:my_products' %}"><button>All products list</button></a>
     {% if request.user.is_authenticated %}
@@ -25,13 +28,15 @@
     </li>
     <hr>
 </header>
-{% if messages %}
-        <hr><hr>
-        {% for message in messages %}
-            <h3>{{ message }}</h3><hr>
-        {% endfor %}
-        <hr><hr>
-    {% endif %}
+{#    <span id="messages">#}
+        {% if messages %}
+            <hr><hr>
+                {% for message in messages %}
+                    <h3>{{ message }}</h3><hr>
+                {% endfor %}
+            <hr><hr>
+        {% endif %}
+{#    </span>#}
     <main class="container">
         <div class="row">
             <div class="col">

@@ -8,7 +8,7 @@
 <body>
     <h2>Categories</h2>
     {% for category in categories %}
-        <a href="{% url 'product:category_products' pk=category.pk %}">
+        <a href="{% url 'product:category_products' pk=category.id %}">
             <button>{{ category.category_title }} </button>
         </a>
     {% endfor %}
@@ -16,7 +16,7 @@
     <h2>My Products list</h2>
     {% for item in products %}
     <tr>
-        <a href="{% url 'product:product_data' pk=item.pk %}"><button>
+        <a href="{% url 'product:product_data' pk=item.id %}"><button>
             {{ item.title }}. Price: {{ item.current_price }} UAH
         </button></a>
         <br>

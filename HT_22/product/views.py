@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 from django.contrib import messages
@@ -16,16 +17,16 @@ def add_products(request):
 @prod_service.superuser_only
 def scraper(request):
     prod_service.start_scraping(request=request)
-    messages.success(request=request, message='Scraping started!')
-    return redirect(to='product:my_products')
+    return JsonResponse(data={'message': 'Scraping started!'}, status=200)
 
 
 def my_products(request):
     categories = prod_service.get_available_categories_list()
+    products_list = Product.objects.all().values('id', 'title', 'current_price')
     return render(request=request,
                   template_name='my_products.html',
                   context={
-                      'products': Product.objects.all(),
+                      'products': products_list,
                       'categories': categories,
                   })
 
@@ -47,12 +48,13 @@ def product_data(request, pk):
 
 
 def category_products(request, pk):
-    category_title = Category.objects.filter(id=pk)[0].category_title
+    category_title = Category.objects.filter(id=pk).values_list('category_title', flat=True)[0]
     categories = prod_service.get_available_categories_list()
+    products_list = Product.objects.filter(category_id=pk).values('id', 'title', 'current_price')
     return render(request=request,
                   template_name='category_products.html',
                   context={
-                      'products': Product.objects.filter(category_id=pk),
+                      'products': products_list,
                       'category': category_title,
                       'categories_list': categories,
                   })
@@ -79,7 +81,6 @@ def edit_confirm(request):
     data = form.cleaned_data
     prod_service.update_product(data=data)
     messages.success(request=request, message='Product edited!')
-    print(data['id'])
     return redirect(to='product:product_data', pk=data['id'])
 
 

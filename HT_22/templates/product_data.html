@@ -7,6 +7,7 @@
     </head>
     <body>
     <h2>{{ product.title }}</h2>
+
     <tr>
         <td>Item name: {{ product.title }}</td>
         <br>
@@ -31,14 +32,13 @@
         <br>
         <td>Category: {{ product.category.category_title }}</td>
     </tr>
+
     <hr>
+
     {% if product.sell_status %}
-        <form id="add-to-cart-form" action="{% url 'cart:add_to_cart' %}" method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button id="add-to-cart" type="submit">Add to you cart</button>
-            <br/>
-        </form>
+        {{ form.as_p }}
+        <button type="submit" id="addToCartBtn">Add to cart</button>
+        <br>
     {% endif %}
 
     {% if request.user.is_superuser %}
@@ -56,5 +56,39 @@
         </form>
     {% endif %}
     </body>
+
+    <script>
+        // Add product to cart function. Redirects to login page if user not authenticated
+        $(document).ready(function () {
+            $(document).on('click', '#addToCartBtn', function () {
+                $.ajax({
+                    url: "{% url 'cart:add_to_cart' %}",
+                    method: 'POST',
+                    data: {
+                        'internal_item_id': $('#id_internal_item_id').val(),
+                        'quantity': $('#id_quantity').val(),
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("x-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (data) {
+                        $('#addToCartBtn').html(data.message);
+                        setTimeout(function () {
+                            $('#addToCartBtn').html('Add to cart')
+                        }, 2000)
+                    },
+                    statusCode: {
+                        300: function () {
+                            window.location = "{% url 'login' %}"
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response)
+                        alert(response.responseText)
+                    }
+                })
+            })
+        });
+    </script>
 
 {% endblock %}

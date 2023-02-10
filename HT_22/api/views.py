@@ -1,13 +1,15 @@
-from rest_framework.generics import ListAPIView, UpdateAPIView, DestroyAPIView
-from rest_framework import permissions, viewsets
+from rest_framework.generics import ListAPIView
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAdminUser, SAFE_METHODS
 
 from product.models import Product, Category
 from api.serializers import ProductSerializer, CategorySerializer
 
 
-class ProductListAPI(ListAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+class IsAdminUserOrReadOnly(IsAdminUser):
+    def has_permission(self, request, view):
+        is_admin = super().has_permission(request, view)
+        return request.method in SAFE_METHODS or is_admin
 
 
 class CategoryListAPI(ListAPIView):
@@ -15,7 +17,7 @@ class CategoryListAPI(ListAPIView):
     serializer_class = CategorySerializer
 
 
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = ProductSerializer
