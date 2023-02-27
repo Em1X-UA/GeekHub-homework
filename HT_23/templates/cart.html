@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <title>Cart</title>
+    </head>
+
+    <body>
+        <h2>Cart</h2>
+        <div id="cartContent">
+            {% for item in items %}
+                <a href="{% url 'product:product_data' pk=item.id %}">{{ item.title }}</a>
+                <p>Price: {{ item.current_price }} UAH</p>
+                <a id="{{ item.id }}">{{ item.in_cart_form.quantity }}</a>
+                <button type="submit" id="updateQtyBtn" value="{{ item.id }}">Submit quantity</button>
+                <br><br>
+                <button type="submit" id="removeFromCartBtn" value="{{ item.id }}">Remove</button>
+                <br><hr>
+            {% empty %}
+                No items in your cart!
+            {% endfor %}
+            {% if sum_cost > 0 %}
+                <h3>Total cost: {{ sum_cost }} UAH</h3>
+                <hr>
+                <button type="submit" id="clearCartBtn">Clear cart!</button>
+            {% endif %}
+        </div>
+    </body>
+
+    <script>
+        // Clear cart function
+        $(document).ready(function () {
+            $(document).on('click', '#clearCartBtn', function () {
+                $.ajax({
+                    url: "{% url 'cart:clear_cart' %}",
+                    method: 'POST',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("x-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (data) {
+                        {#$('#cartContent').load(location.href + " #cartContent");#}
+                        $('#cartContent').html(data.message)
+                    },
+                    error: function (xhr) {
+                        console.log(xhr)
+                        alert(xhr.responseText)
+                    }
+
+                })
+            })
+        });
+
+        // Remove product from cart function
+        $(document).ready(function () {
+            $(document).on('click', '#removeFromCartBtn', function () {
+                const productId = $(this).val()
+                $.ajax({
+                    url: "{% url 'cart:remove_from_cart' %}",
+                    method: 'POST',
+                    data: {
+                        'id': productId
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("x-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function () {
+                        $('#cartContent').load(location.href + " #cartContent")
+                    },
+                    error: function (xhr) {
+                        console.log(xhr)
+                        alert(xhr.responseText)
+                    }
+
+                })
+            })
+        });
+
+        // Change product quantity in cart
+        $(document).ready(function () {
+            $(document).on('click', '#updateQtyBtn', function () {
+                const productId = $(this).val()
+                $.ajax({
+                    url: "{% url 'cart:change_qty' %}",
+                    method: 'POST',
+                    data: {
+                        'internal_item_id': productId,
+                        'quantity': $('#' + productId + ' :input').val()
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("x-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function () {
+                        $('#cartContent').load(location.href + " #cartContent")
+                    },
+                    error: function (xhr) {
+                        console.log(xhr)
+                        alert(xhr.responseText)
+                    }
+
+                })
+            })
+        });
+    </script>
+
+{% endblock %}

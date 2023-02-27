@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Add new products to scrape</h2>
+    <label>
+        Please enter list of Rozetka products ID to scrape it:
+        <br>
+        <textarea id="id_string" rows="10" cols="60"
+                  placeholder="Enter ID separated by comma, new line, semicolon or a space"></textarea>
+    </label>
+    <br>
+    <br>
+    <button type="submit" id="addProdBtn">Add products</button>
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '#addProdBtn', function () {
+                $.ajax({
+                    url: "{% url 'product:scraper' %}",
+                    data: {
+                        'id_string': $('#id_string').val(),
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("x-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (data) {
+                        $('#addProdBtn').html(data.message);
+                        setTimeout(function () {
+                            $('#addProdBtn').html('Add products')
+                        }, 5000)
+                    },
+                    error: function (xhr) {
+                        console.log(xhr)
+                        alert(xhr.responseText)
+                    }
+
+                })
+            })
+        });
+    </script>
+
+{% endblock %}
+
